@@ -1,6 +1,7 @@
 #project-root/backend/app/main.py
 
 import os
+from dotenv import load_dotenv
 from openai import OpenAI
 from fastapi import FastAPI, Depends, HTTPException, Path, Body
 from sqlalchemy.orm import Session
@@ -11,8 +12,16 @@ from .models import FlowRun
 import json
 from fastapi.middleware.cors import CORSMiddleware
 
+# 1. Cargar las variables de entorno
+load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# 2. Obtener la API key de OpenAI
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise Exception("OPENAI_API_KEY no encontrada en las variables de entorno.")
+
+# 3. Crear cliente OpenAI
+client = OpenAI(api_key=openai_api_key)
 
 # Crear todas las tablas
 models.Base.metadata.create_all(bind=database.engine)

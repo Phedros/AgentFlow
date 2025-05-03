@@ -4,7 +4,8 @@ import { fetchAgents, fetchFlows, createFlow, runFlow } from '../services/api';
 import { FlowForm } from '../components/FlowForm';
 import { FlowList } from '../components/FlowList';
 import { FlowRun } from '../components/FlowRun';
-import { Input } from "../components/ui/input";
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export function Flows() {
   const [agents, setAgents] = useState([]);
@@ -29,29 +30,43 @@ export function Flows() {
   };
 
   return (
-    <div className="space-y-8">
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Crear Flujo</h2>
-        <FlowForm agents={agents} onSubmit={handleCreateFlow} />
-      </section>
+    <div className="container mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Crear Flujo */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Crear Flujo</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FlowForm agents={agents} onSubmit={handleCreateFlow} />
+        </CardContent>
+      </Card>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Flujos</h2>
-        <div className="mb-4">
+      {/* Lista de Flujos */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Flujos</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
           <Input
             label="Prompt de entrada"
+            placeholder="Escribe tu prompt..."
             value={inputPrompt}
             onChange={e => setInputPrompt(e.target.value)}
           />
-        </div>
-        <FlowList flows={flows} onRun={handleRunFlow} />
-      </section>
+          <FlowList flows={flows} onRun={handleRunFlow} />
+        </CardContent>
+      </Card>
 
+      {/* Resultados: ocupa full width en pantallas grandes */}
       {history.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Resultados</h2>
-          <FlowRun history={history} />
-        </section>
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Resultados</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FlowRun history={history} />
+          </CardContent>
+        </Card>
       )}
     </div>
   );

@@ -64,17 +64,25 @@ export function FlowForm({ agents, onSubmit }) {
       <CardHeader className="border-b">
         <CardTitle className="text-2xl">Crear Flujo</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Nombre de flujo"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-          />
+      <CardContent className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Nombre del flujo */}
+          <div>
+            <Label htmlFor="flow-name">Nombre del flujo</Label>
+            <Input
+              id="flow-name"
+              name="name"
+              placeholder="Escribe el nombre del flujo"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
 
+          {/* Instrucciones */}
           <Label>Arrastra agentes de «Disponibles» a «Pasos»</Label>
 
+          {/* Drag & Drop */}
           <DragDropContext onDragEnd={handleDragEnd}>
             <div className="flex gap-4">
               {/* Disponibles */}
@@ -84,17 +92,14 @@ export function FlowForm({ agents, onSubmit }) {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     className="w-1/2 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 min-h-[200px]"
+                    aria-label="Agentes disponibles"
                   >
-                    <h4 className="font-semibold mb-2">Disponibles</h4>
+                    <h4 id="available-heading" className="font-semibold mb-2">Disponibles</h4>
                     {available.length === 0 && (
-                      <p className="text-sm text-gray-500">No hay agentes disponibles</p>
+                      <p className="text-sm text-gray-500 italic">No hay agentes disponibles</p>
                     )}
                     {available.map((agent, index) => (
-                      <Draggable
-                        key={agent.id}
-                        draggableId={`avail-${agent.id}`}
-                        index={index}
-                      >
+                      <Draggable key={agent.id} draggableId={`avail-${agent.id}`} index={index}>
                         {prov => (
                           <div
                             ref={prov.innerRef}
@@ -119,17 +124,14 @@ export function FlowForm({ agents, onSubmit }) {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     className="w-1/2 p-2 border rounded-lg bg-blue-50 dark:bg-blue-900 min-h-[200px]"
+                    aria-label="Pasos del flujo"
                   >
-                    <h4 className="font-semibold mb-2">Pasos</h4>
+                    <h4 id="steps-heading" className="font-semibold mb-2">Pasos</h4>
                     {steps.length === 0 && (
-                      <p className="text-sm text-gray-500">Arrastra aquí</p>
+                      <p className="text-sm text-gray-500 italic">Arrastra aquí</p>
                     )}
                     {steps.map((agent, index) => (
-                      <Draggable
-                        key={agent.id}
-                        draggableId={`step-${agent.id}`}
-                        index={index}
-                      >
+                      <Draggable key={agent.id} draggableId={`step-${agent.id}`} index={index}>
                         {prov => (
                           <div
                             ref={prov.innerRef}
@@ -149,8 +151,8 @@ export function FlowForm({ agents, onSubmit }) {
             </div>
           </DragDropContext>
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={steps.length === 0}
             className="w-full"
           >
